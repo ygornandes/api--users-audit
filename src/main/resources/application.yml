@@ -1,0 +1,29 @@
+server:
+  port: 5000
+spring:
+  application:
+    name: api--users-audit
+  data:
+    mongodb:
+      host: mongodb
+      database: users-audit-db
+      username: dummy
+      password: !!str 12345
+
+activemq:
+  broker: tcp://activemq:61616
+  username: admin
+  password: secret
+  queue: audit
+  prefetchLimit: 10
+  maxRetries: 3
+  redeliveryDelay: 3
+
+messages:
+  requestBodyRequired: Request body is required.
+  auditNotFound: Audit not found.
+  pathParamRequired: Path param is required.
+  queryParamRequired: Query param is required.
+  invalidPayload: Payload is not a valid Json.
+  serializeError: Error serializing Payload.
+

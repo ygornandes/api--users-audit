@@ -1,0 +1,45 @@
+version: '3'
+
+networks:
+  db:
+  queue:
+
+services:
+  mongodb:
+    image: bitnami/mongodb
+    container_name: db--users-audit
+    environment:
+      MONGODB_DATABASE: users-audit-db
+      MONGODB_USERNAME: dummy
+      MONGODB_PASSWORD: 12345
+    ports:
+      - "27017:27017"
+    networks:
+      - db
+
+  activemq:
+    image: ivonet/activemq
+    container_name: queue--users-audit
+    ports:
+      - "8161:8161"
+      - "61616:61616"
+      - "61613:61613"
+    environment:
+      - ACTIVEMQ_MIN_MEMORY=512
+      - ACTIVEMQ_MAX_MEMORY=2048
+      - ACTIVEMQ_ENABLED_AUTH=true
+      - ACTIVEMQ_ADMIN_LOGIN=admin
+      - ACTIVEMQ_ADMIN_PASSWORD=secret
+    networks:
+      - queue
+  api--users-audit:
+    image: com.jumiapay/api--users-audit
+    container_name: api--users-audit
+    depends_on:
+      - mongodb
+      - activemq
+    ports:
+      - "5000:5000"
+    networks:
+      - db
+      - queue
