@@ -39,7 +39,7 @@ public class AuditController {
     @GetMapping(value = "/users/{id}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation("Retrieving all Audits by User Id")
-    public List<AuditResponse> getAuditsByUserId(@PathVariable String id,
+    public List<AuditResponse> getAuditsByUserId(@PathVariable @NotNull(message = Constants.ID_NOT_NULL) String id,
                                                  @RequestParam @NotNull(message = Constants.PAGE_NOT_NULL) Integer page,
                                                  @RequestParam @NotNull(message = Constants.SIZE_NOT_NULL) Integer size,
                                                  @RequestParam(defaultValue = "id") @NotBlank(message = Constants.SORT_NOT_BLANCK) String sort,

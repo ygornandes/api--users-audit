@@ -1,7 +1,7 @@
 package com.jumiapay.users.audit.domain.service.impl;
 
 import com.jumiapay.users.audit.application.config.properties.messages.MessagesProperties;
-import com.jumiapay.users.audit.application.exceptions.BusinessException;
+import com.jumiapay.users.audit.application.exceptions.AuditNotFoundException;
 import com.jumiapay.users.audit.domain.handler.PayloadHandler;
 import com.jumiapay.users.audit.domain.model.Audit;
 import com.jumiapay.users.audit.domain.repository.AuditRepository;
@@ -34,11 +34,11 @@ public class AuditServiceImpl implements AuditService {
 
     @Override
     public List<Audit> getAuditsByUserId(String id, Integer page, Integer size, String[] sort, DirectionEnum direction) {
-        return repository.getAuditsByUserId(id,page,size,sort,direction).orElseThrow(() -> new BusinessException(messages.getAuditNotFound()));
+        return repository.getAuditsByUserId(id,page,size,sort,direction).orElseThrow(() -> new AuditNotFoundException(messages.getAuditNotFound()));
     }
 
     @Override
     public List<Audit> getAudits(Integer page, Integer size, String[] sort, DirectionEnum direction) {
-        return repository.getAudits(page,size,sort,direction).orElseThrow(() -> new BusinessException(messages.getAuditNotFound()));
+        return repository.getAudits(page,size,sort,direction).orElseThrow(() -> new AuditNotFoundException(messages.getAuditNotFound()));
     }
 }

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jumiapay.users.audit.application.config.properties.messages.MessagesProperties;
-import com.jumiapay.users.audit.application.exceptions.PayloadInvalidException;
+import com.jumiapay.users.audit.application.exceptions.InvalidPayloadException;
 import com.jumiapay.users.audit.domain.model.Audit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -35,23 +35,30 @@ public class PayloadHandler {
        return payloadMap.entrySet()
                 .stream()
                 .peek(map -> {
-                    if (map.getKey().toLowerCase().contains("password") ||
-                            map.getKey().toLowerCase().contains("card") ||
-                            map.getKey().toLowerCase().contains("token"))
-                        map.setValue(String.valueOf(map.getValue()).replaceAll(".", "*"));
 
-                    if (map.getValue() instanceof Map)
-                        map.setValue(replaceSentitiveValues((Map<String, Object>) map.getValue()));
+                    Object value = map.getValue();
+
+                    if (isSentitiveData(map.getKey().toLowerCase()))
+                        map.setValue(String.valueOf(value).replaceAll(".", "*"));
+
+                    if (value instanceof Map)
+                        map.setValue(replaceSentitiveValues((Map<String, Object>) value));
 
                 })
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    private boolean isSentitiveData(String key) {
+        return key.contains("password") ||
+                key.contains("card") ||
+                key.contains("token");
     }
 
     private String serialize(Map<String, Object> payloadMap) {
         try {
             return mapper.writeValueAsString(payloadMap);
         } catch (JsonProcessingException e) {
-            throw new PayloadInvalidException(messages.getSerializeError());
+            throw new InvalidPayloadException(messages.getSerializeError());
         }
     }
 
@@ -59,7 +66,7 @@ public class PayloadHandler {
       try {
             return mapper.readValue(payload, new TypeReference<LinkedHashMap<String, Object>>(){} );
         } catch (IOException e) {
-            throw new PayloadInvalidException(messages.getInvalidPayload());
+            throw new InvalidPayloadException(messages.getInvalidPayload());
         }
     }
 }

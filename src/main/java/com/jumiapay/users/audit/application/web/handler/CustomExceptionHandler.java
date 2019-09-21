@@ -1,7 +1,8 @@
 package com.jumiapay.users.audit.application.web.handler;
 
 import com.jumiapay.users.audit.application.config.properties.messages.MessagesProperties;
-import com.jumiapay.users.audit.application.exceptions.BusinessException;
+import com.jumiapay.users.audit.application.exceptions.AuditNotFoundException;
+import com.jumiapay.users.audit.application.exceptions.InvalidPayloadException;
 import com.jumiapay.users.audit.application.web.responses.ErroResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -70,9 +71,14 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(createErrorResponse(status,null, messages.getPathParamRequired()), headers, status);
     }
 
-    @ExceptionHandler(BusinessException.class)
-    protected ResponseEntity<Object> handleComplaintNotFoundException(BusinessException be, WebRequest request){
-        return new ResponseEntity<>(createErrorResponse(HttpStatus.NOT_FOUND,null,be.getMessage()), HttpStatus.NOT_FOUND);
+    @ExceptionHandler(AuditNotFoundException.class)
+    protected ResponseEntity<Object> handleAuditNotFoundException(AuditNotFoundException ae, WebRequest request){
+        return new ResponseEntity<>(createErrorResponse(HttpStatus.NOT_FOUND,null,ae.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(InvalidPayloadException.class)
+    protected ResponseEntity<Object> handleInvalidPayloadException(InvalidPayloadException ie, WebRequest request){
+        return new ResponseEntity<>(createErrorResponse(HttpStatus.BAD_REQUEST,null,ie.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)

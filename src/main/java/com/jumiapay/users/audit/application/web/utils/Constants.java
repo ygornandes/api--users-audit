@@ -10,4 +10,5 @@ public class Constants {
     public static final String PAGE_NOT_NULL = "Page can not be null.";
     public static final String SORT_NOT_BLANCK = "Sort can not be blanck.";
     public static final String DIRECTION_INVALID = "Allowed values for direction are ASC or DESC";
+    public static final String ID_NOT_NULL = "User id can not be null." ;
 }
