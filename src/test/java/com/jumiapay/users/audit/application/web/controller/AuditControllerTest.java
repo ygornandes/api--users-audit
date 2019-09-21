@@ -1,5 +1,6 @@
 package com.jumiapay.users.audit.application.web.controller;
 
+import static com.jumiapay.users.audit.utils.MockUtil.getRequestBody;
 import static org.hamcrest.Matchers.*;
 
 import org.junit.Before;
@@ -141,14 +142,5 @@ public class AuditControllerTest {
                 .andExpect(jsonPath("$.status", is(404)))
                 .andExpect(jsonPath("$.timestamp",is(notNullValue())))
                 .andExpect(jsonPath("$.message",is("Audit not found.")));
-    }
-
-
-    private String getRequestBody(String path) throws IOException {
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(path);
-
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, Charset.forName(StandardCharsets.UTF_8.name())))) {
-            return br.lines().collect(Collectors.joining(System.lineSeparator()));
-        }
     }
 }

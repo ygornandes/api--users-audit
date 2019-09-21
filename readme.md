@@ -9,7 +9,11 @@ We used the Spring Boot framework for creating microservices and DDD for project
 
 For build the application use the command below:
 
+Linux: 
 - ./gradlew clean build docker
+
+Windows:
+- gradlew.bat clean build docker
 
 For run the API and switch on MongoDB and ActiveMq locally,  write the following command:
 
