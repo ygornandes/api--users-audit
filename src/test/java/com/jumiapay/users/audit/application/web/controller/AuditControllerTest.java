@@ -121,7 +121,7 @@ public class AuditControllerTest {
 
     @Test
     public void shouldReturnNotFoundOnGetAll() throws Exception {
-        mockMvc.perform(get("/audits").param("page","1").param("size","10"))
+        mockMvc.perform(get("/audits").param("page","4").param("size","10"))
                 .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.status", is(404)))
