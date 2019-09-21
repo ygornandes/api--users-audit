@@ -1,5 +1,7 @@
 package com.jumiapay.users.audit.utils;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jumiapay.users.audit.domain.model.Audit;
 import com.jumiapay.users.audit.domain.model.User;
 
@@ -10,8 +12,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -20,7 +21,7 @@ public class MockUtil {
         return Audit.builder()
                 .user(getUser(userId, type))
                 .action("TESTE")
-                .payload(getRequestBody("json/auditJsonSuccess.json").toString())
+                .payload(deserialize(getRequestBody("json/auditJsonSuccess.json")))
                 .build();
     }
 
@@ -43,15 +44,7 @@ public class MockUtil {
         return Audit.builder()
                 .user(getUser(userId, type))
                 .action("TESTE")
-                .payload(getRequestBody("json/payloadWithSuccess.json").toString())
-                .build();
-    }
-
-    public static Audit getAuditInValidPayload(String userId, String type) {
-        return Audit.builder()
-                .user(getUser(userId, type))
-                .action("TESTE")
-                .payload("smdmqiwomdiwqmdi")
+                .payload(deserialize(getRequestBody("json/payloadWithSuccess.json")))
                 .build();
     }
 
@@ -59,7 +52,7 @@ public class MockUtil {
         return Audit.builder()
                 .user(getUser(userId, type))
                 .action("TESTE")
-                .payload(getRequestBody("json/payloadWithSensitiveValues.json").toString())
+                .payload( deserialize(getRequestBody("json/payloadWithSensitiveValues.json")))
                 .build();
     }
 
@@ -72,8 +65,13 @@ public class MockUtil {
                 .id("fdkfodfkodkfodsk")
                 .user(getUser(userId, type))
                 .action("TESTE")
-                .payload("{\"valid\": \"json\"}")
+                .payload(Collections.emptyMap())
                 .createdDate(LocalDateTime.now())
                 .build();
+    }
+
+    private static Map<String, Object> deserialize(String payload) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.readValue(payload, new TypeReference<LinkedHashMap<String, Object>>(){} );
     }
 }

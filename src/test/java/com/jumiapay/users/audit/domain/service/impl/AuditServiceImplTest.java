@@ -2,14 +2,12 @@ package com.jumiapay.users.audit.domain.service.impl;
 
 import com.jumiapay.users.audit.application.config.properties.messages.MessagesProperties;
 import com.jumiapay.users.audit.application.exceptions.AuditNotFoundException;
-import com.jumiapay.users.audit.application.exceptions.InvalidPayloadException;
 import com.jumiapay.users.audit.domain.handler.PayloadHandler;
 import com.jumiapay.users.audit.domain.model.Audit;
 import com.jumiapay.users.audit.domain.repository.AuditRepository;
 import com.jumiapay.users.audit.domain.service.enums.DirectionEnum;
 import com.jumiapay.users.audit.resource.queue.ProducerQueue;
 import com.jumiapay.users.audit.utils.MockUtil;
-import static org.hamcrest.Matchers.*;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -23,6 +21,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -43,7 +42,7 @@ public class AuditServiceImplTest {
     @Before
     public void setUp(){
         MessagesProperties messages = new MessagesProperties();
-        service = new AuditServiceImpl(repository,producer,messages,new PayloadHandler(messages));
+        service = new AuditServiceImpl(repository,producer,messages,new PayloadHandler());
     }
 
     @Test
@@ -62,13 +61,6 @@ public class AuditServiceImplTest {
     public void shouldEnqueueWithSuccessValidPayloadWithSentitiveValues() throws IOException {
         service.enqueue(MockUtil.getAuditValidPayloadWithSentitiveValues("Bob","CUSTOMER"));
         verify(producer,atLeastOnce()).send(any());
-    }
-
-    @Test
-    public void shouldReturnInvalidPayloadException() {
-        thrown.expect(InvalidPayloadException.class);
-        service.enqueue(MockUtil.getAuditInValidPayload("Robert","OPERATION"));
-        verify(producer,never()).send(any());
     }
 
     @Test

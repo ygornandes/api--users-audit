@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Getter
@@ -20,7 +21,7 @@ public class AuditDocument {
     private String id;
     private UserDocument user;
     private String action;
-    private String payload;
+    private Map<String,Object> payload;
     private LocalDateTime createdDate;
 
     public static AuditDocument toDocument(Audit audit) {

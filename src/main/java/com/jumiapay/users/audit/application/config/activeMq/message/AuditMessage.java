@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @Builder
 @Data
@@ -17,7 +18,7 @@ public class AuditMessage implements Serializable {
     private String id;
     private UserMessage user;
     private String action;
-    private String payload;
+    private Map<String,Object> payload;
     private LocalDateTime createdDate;
 
     public static AuditMessage toMessage(Audit audit){

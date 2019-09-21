@@ -6,6 +6,7 @@ import lombok.Getter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.Map;
 
 @Getter
 public class AuditRequest {
@@ -14,8 +15,8 @@ public class AuditRequest {
     private UserRequest user;
     @NotBlank(message = Constants.ACTION_NOT_BLANCK)
     private String action;
-    @NotBlank(message = Constants.PAYLOAD_NOT_BLANCK)
-    private String payload;
+    @NotNull(message = Constants.PAYLOAD_NOT_NULL)
+    private Map<String,Object> payload;
 
     public Audit toAudit(){
         return Audit.builder()

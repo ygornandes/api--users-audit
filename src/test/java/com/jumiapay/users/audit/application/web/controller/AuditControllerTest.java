@@ -1,28 +1,17 @@
 package com.jumiapay.users.audit.application.web.controller;
 
-import static com.jumiapay.users.audit.utils.MockUtil.getRequestBody;
-import static org.hamcrest.Matchers.*;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.util.stream.Collectors;
-
-import static org.hamcrest.Matchers.notNullValue;
+import static com.jumiapay.users.audit.utils.MockUtil.getRequestBody;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -40,11 +29,7 @@ public class AuditControllerTest {
 
     @Before
     public void setUp() throws Exception {
-        mockMvc.perform(post("/audits")
-                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                .content(getRequestBody("json/auditJsonSuccess.json")))
-                .andDo(print())
-                .andExpect(status().isCreated());
+        initialData();
     }
 
     @Test
@@ -79,7 +64,7 @@ public class AuditControllerTest {
                 .andExpect(jsonPath("$.errors").isArray())
                 .andExpect(jsonPath("$.errors", hasSize(3)))
                 .andExpect(jsonPath("$.errors", hasItem("User can not be null.")))
-                .andExpect(jsonPath("$.errors", hasItem("Payload can not be blanck.")))
+                .andExpect(jsonPath("$.errors", hasItem("Payload can not be null.")))
                 .andExpect(jsonPath("$.errors", hasItem("Action can not be blanck.")));
 
     }
@@ -142,5 +127,13 @@ public class AuditControllerTest {
                 .andExpect(jsonPath("$.status", is(404)))
                 .andExpect(jsonPath("$.timestamp",is(notNullValue())))
                 .andExpect(jsonPath("$.message",is("Audit not found.")));
+    }
+
+    private void initialData() throws Exception {
+        mockMvc.perform(post("/audits")
+                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                .content(getRequestBody("json/auditJsonSuccess.json")))
+                .andDo(print())
+                .andExpect(status().isCreated());
     }
 }

@@ -6,6 +6,7 @@ import lombok.Data;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Data
@@ -14,7 +15,7 @@ public class AuditResponse {
     private String id;
     private UserResponse user;
     private String action;
-    private String payload;
+    private Map<String,Object> payload;
     private String createdDate;
 
     public static List<AuditResponse> toListResponse(List<Audit> audits) {

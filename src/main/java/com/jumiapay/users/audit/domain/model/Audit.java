@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.UUID;
 
 @Builder
@@ -14,7 +15,7 @@ public class Audit {
     private User user;
     private String action;
     @Setter
-    private String payload;
+    private Map<String,Object> payload;
     private LocalDateTime createdDate;
 
     public Audit create(){
