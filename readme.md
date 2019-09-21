@@ -9,11 +9,7 @@ We used the Spring Boot framework for creating microservices and DDD for project
 
 For build the application use the command below:
 
-Linux: 
-- ./gradlew clean build docker
-
-Windows:
-- gradlew.bat clean build docker
+- gradle clean build docker
 
 For run the API and switch on MongoDB and ActiveMq locally,  write the following command:
 
@@ -24,7 +20,7 @@ For turn off the application use the command below:
 - docker-compose down
 
 ##### Minimum requirements
-
+- Gradle
 - Java 8
 - Docker
 
@@ -54,8 +50,8 @@ For turn off the application use the command below:
 - Lombok
 
 ## Tools:
-
-- IntelliJ
+- SO Windows
+- IDE IntelliJ
 - Gradle
 - Git
 - Java 1.8
