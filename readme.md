@@ -34,7 +34,7 @@ For turn off the application use the command below:
  
 ## Archicteture
 
-- Micro Serviços
+- MicroServices
 - DDD
   
 ## Tecnologies
